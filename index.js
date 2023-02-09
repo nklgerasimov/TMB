@@ -3,100 +3,7 @@ const {gameOptions, againOptions} = require ('./options')
 const token = '6076479496:AAHpLcbSKZxFfEQ9GzJeDbD0m0pD_cQxzUY'
 
 const bot = new TelegramApi(token, {polling: true})
-//-----------------------------------------------------
-// const fs = require('fs')
-// const puppeteer = require('puppeteer')
 
-// let link = 'https://www.dns-shop.ru/catalog/17a8a01d16404e77/smartfony/?p=';
-
-// (async () => {
-
-//     let flag = true
-//     let res = []
-//     let counter = 1
-
-   
-//         try {
-        
-//             let browser = await puppeteer.launch({
-//                 headless: false,
-//                 slowMo: 100,
-//                 devtools: true
-//             })
-    
-//             let page = await browser.newPage()
-//             await page.setViewport({
-//                 width:1400, height: 900
-//             })
-    
-//             while (flag && (counter < 3) ) {
-//                 await page.goto(`${link}${counter}`)
-//                 await page.waitForSelector('a.pagination-widget__page-link_next')
-//                 // console.log(counter);
-    
-//                 let html = await page.evaluate(async () => {
-//                     let page = []
-    
-//                     try {
-                        
-//                         let divs = document.querySelectorAll('div.catalog-product')
-
-                        
-//                         divs.forEach (div => {
-//                             let a = div.querySelector('a.catalog-product__name')
-    
-//                             let obj = {
-//                                 // title: a !== null
-//                                 //     ? a.innerText
-//                                 //     : 'NO-LINK',
-//                                 // link: a.href,
-//                                 price: div.querySelector('div.product-buy__price') !== null
-//                                         ? div.querySelector('div.product-buy__price').innerText 
-//                                         : 'NO-PRICE'
-//                             }
-    
-//                             page.push(obj)
-                            
-
-//                         })
-    
-//                     } catch (e) {
-//                         console.log(e)
-//                     }
-    
-//                     return page
-//                 }, { waitUntil: 'a.pagination-widget__page-link_next' })
-                
-//                 await res.push(html)
-                
-//                 for (let i in res) {
-//                     if (res[i].length === 0) flag = false
-//                 }
-                
-//                 counter++
-//             }
-            
-            
-//             await browser.close()
-            
-//             res = res.flat()
-            
-//             fs.writeFile('dns.json', JSON.stringify({ 'data': res}), err => {
-//                 if (err) throw err
-//             })
-
-//             start(JSON.stringify({ 'data': res}))
-//             // start(res)
-            
-//         } catch (e) {
-//             console.log(e);
-//             await browser.close();
-//         }
-    
-// }) ();
-
-
-//----------------------------------------------------
 const chats = {}
 
 const startGame = async (chatId) => {
@@ -117,10 +24,12 @@ const start = () => {
     bot.on('message', async msg => {
         const text = msg.text;
         const chatId = msg.chat.id;
+        // const photo = 'C:\Users\nkl\Desktop\1.bmp';
+        // const protect_content = true;
         // bot.sendMessage(chatId, res)
     
         if (text === '/start') {
-            await bot.sendMessage(chatId, 'sticker')
+            // await bot.sendPhoto(chatId, '1.jpg')
             return bot.sendMessage(chatId, `Добро пожаловать`)
             // return bot.sendMessage(chatId, res)
 
@@ -134,6 +43,10 @@ const start = () => {
            return startGame(chatId);
         }
 
+        if (text === '/foto') {
+           return bot.sendPhoto(chatId, '1.jpg', {protect_content: true})
+        }
+
         return bot.sendMessage(chatId, `Я Тебя не понимать`)
     })
 
@@ -143,7 +56,7 @@ const start = () => {
         if (data === '/again') {
             return startGame(chatId);
         }
-        if (data === chats[chatId]) {
+        if (data == chats[chatId]) {
             return bot.sendMessage(chatId, `Ты угадал ${chats[chatId]}`, againOptions)
         } else {
             return bot.sendMessage(chatId, `Ты неугадал, верная ${chats[chatId]}`, againOptions)
